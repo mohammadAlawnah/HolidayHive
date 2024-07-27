@@ -8,14 +8,17 @@ export const initApp = (app,express)=>{
     app.use(express.json())
     connectDB();
 
-    app.use('/',(req,res)=>{
-        return res.json({message : 'Welcome To HolidayHive Project'})
-    })
+ 
     app.use('/auth',authRouter)
     app.use('/user',userRouter)
     app.use('/country',countryRouter)
     app.use('/destination',destinationRouter)
     app.use('/coupon',couponRouter)
+
+    app.use('/',(req,res)=>{
+        return res.json({message : 'Welcome To HolidayHive Project'})
+    })
+    
     // app.use('/',(req,res)=>{
     //     return res.json({message : "done"})
     // })
