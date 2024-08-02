@@ -6,9 +6,16 @@ import countryRouter from './modules/country/country.router.js'
 import couponRouter from './modules/coupon/coupon.router.js'
 import tripRouter from './modules/trip/trip.router.js'
 import tripUserRouter from './modules/tripUser/tripUser.router.js'
+import cors from 'cors'
+
 export const initApp = (app,express)=>{
     app.use(express.json())
+    app.use(cors())
     connectDB();
+    app.use('/',(req,res)=>{
+        res.json({message : 'welcome to HolidayHive project'})
+    })
+    
 
 
     app.use('/auth',authRouter)
@@ -18,8 +25,13 @@ export const initApp = (app,express)=>{
     app.use('/coupon',couponRouter)
     app.use('/trip',tripRouter)
     app.use('/tripUser',tripUserRouter)
-    // app.use('/',(req,res)=>{
-    //     return res.json({message : "done"})
-    // })
+    app.use('*',(req,res)=>{
+        res.status(404).json({message : "page not found"})
+    })
+
+    app.use((err,req,res,next)=>{
+        res.json({error  : "this error"})
+
+    })
 
 }
