@@ -1,44 +1,59 @@
-import couponModel from "../../../DB/model/coupon.model.js"
-export const create = async(req,res)=>{
-    
-    if(await couponModel.findOne({name : req.body.name})){
+import couponModel from "../../../DB/model/coupon.model.js";
 
-        return res.status(409).json({message : 'coupon already exist'})
+export const create = async (req, res) => {
+    const existingCoupon = await couponModel.findOne({ name: req.body.name });
+
+    if (existingCoupon) {
+        return res.status(409).json({ message: 'Coupon already exists' });
     }
 
-    req.body.expierDate = new Date(req.body.expierDate);
-
+    req.body.expireDate = new Date(req.body.expireDate);
     const coupon = await couponModel.create(req.body);
 
-    return res.json({message : 'success', coupon})
-}
+    return res.status(201).json({ message: 'Coupon created successfully', coupon });
+};
 
-export const getAll = async(req,res)=>{
-    const coupon = await couponModel.find({})
+export const getAll = async (req, res) => {
+    const coupons = await couponModel.find({});
+    return res.status(200).json({ message: 'Success', coupons });
+};
 
-    return res.status(209).json({message : coupon})
-}
-
-export const getCoupon = async(req,res)=>{
-    const {id} = req.params;
-
+export const getCoupon = async (req, res) => {
+    const { id } = req.params;
     const coupon = await couponModel.findById(id);
 
-    if(!coupon){
-        return res.status(409).json({message : 'coupon not found'})
+    if (!coupon) {
+        return res.status(404).json({ message: 'Coupon not found' });
     }
 
-    if(coupon.expireDate < new Date()){
-        return res.json({message : 'coupon expierd',coupon})
+    if (coupon.expireDate < new Date()) {
+        return res.status(400).json({ message: 'Coupon expired', coupon });
     }
 
-    return res.status(209).json({message : coupon})
+    return res.status(200).json({ message: 'Success', coupon });
+};
 
-}
+export const update = async (req, res) => {
+    const { id } = req.params;
+    const coupon = await couponModel.findById(id);
 
-export const update = async(req,res)=>{
-    const {id} = req.params;
-    
+    if (!coupon) {
+        return res.status(404).json({ message: 'Coupon not found' });
+    }
 
+    if (req.body.name) {
+        const existingCoupon = await couponModel.findOne({ name: req.body.name, _id: { $ne: id } });
 
-}
+        if (existingCoupon) {
+            return res.status(409).json({ message: 'Coupon with this name already exists' });
+        }
+    }
+
+    if (req.body.expireDate) {
+        req.body.expireDate = new Date(req.body.expireDate);
+    }
+
+    const updatedCoupon = await couponModel.findByIdAndUpdate(id, req.body, { new: true });
+
+    return res.status(200).json({ message: 'Coupon updated successfully', coupon: updatedCoupon });
+};

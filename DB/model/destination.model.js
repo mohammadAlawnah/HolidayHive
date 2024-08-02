@@ -44,11 +44,11 @@ const destinationSchema = new Schema({
     activities: {
         type: String,
     },
-    price: {
-        type : Types.ObjectId,
-        ref :'price',
-        require : true,
-    },    
+    // price: {
+    //     type : Types.ObjectId,
+    //     ref :'price',
+    //     require : true,
+    // },
 })
 const destinationModel = model('destination',destinationSchema)
 export default destinationModel;

@@ -1,47 +1,44 @@
-import userModel from "../../../DB/model/user.model.js"
-export const getAllUsers = async(req,res)=>{
+import userModel from "../../../DB/model/user.model.js";
+
+export const getAllUsers = async (req, res) => {
     const users = await userModel.find({});
-    return res.json({message : users})
-}
+    return res.status(200).json({ message: 'Success', users });
+};
 
-export const getActiveUsers = async(req,res)=>{
-    const users = await userModel.find({status: "Active"});
-    return res.json({message : users})
-}
+export const getActiveUsers = async (req, res) => {
+    const users = await userModel.find({ status: "Active" });
+    return res.status(200).json({ message: 'Success', users });
+};
 
-export const getNotActiveUsers = async(req,res)=>{
-    const users = await userModel.find({status: "NotActive"});
-    return res.json({message : users})
-}
+export const getNotActiveUsers = async (req, res) => {
+    const users = await userModel.find({ status: "NotActive" });
+    return res.status(200).json({ message: 'Success', users });
+};
 
-export const getConfirmedUsers = async(req,res)=>{
-    const users = await userModel.find({confirmEmail : true});
-    return res.json({message : users})
-}
+export const getConfirmedUsers = async (req, res) => {
+    const users = await userModel.find({ confirmEmail: true });
+    return res.status(200).json({ message: 'Success', users });
+};
 
-export const getNotConfirmedUsers = async(req,res)=>{
-    const users = await userModel.find({confirmEmail : false});
-    return res.json({message : users})
-}
+export const getNotConfirmedUsers = async (req, res) => {
+    const users = await userModel.find({ confirmEmail: false });
+    return res.status(200).json({ message: 'Success', users });
+};
 
+export const updateRole = async (req, res) => {
+    const { email, role } = req.body;
 
+    const user = await userModel.findOne({ email });
 
-export const updatRole = async(req,res)=>{
-    const {email,role} = req.body;
-    
-    const user = await userModel.findOne({email});
-
-    if(!user){
-        return res.status(409).json({message : "user not found"})
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
     }
 
-    if(user.role == role){
-        return res.json({message : `The user is already the${role}`})
+    if (user.role === role) {
+        return res.status(200).json({ message: `User is already a ${role}` });
     }
 
-    const newRoleUser = await userModel.updateOne({email},{role : role})
+    await userModel.updateOne({ email }, { role });
 
-    return res.status(200).json({message :`user is ${role} now`})
-
-}
-
+    return res.status(200).json({ message: `User role updated to ${role}` });
+};

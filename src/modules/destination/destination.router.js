@@ -7,6 +7,7 @@ import fileUpload, { filleType } from '../../utls/multer.js';
 import * as destinationControllar from './destination.controllar.js'
 const router = Router({mergeParams : true});
 
+router.get('/',asyncHandler(destinationControllar.getAll))
 router.post('/',asyncHandler(auth(endPoints.create)),fileUpload(filleType.image).fields([
     {name:'mainImage',maxCount:1},
     {name:'subImages',maxCount:5},
