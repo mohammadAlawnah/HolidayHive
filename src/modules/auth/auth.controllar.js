@@ -4,6 +4,14 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     req.body.password = bcrypt.hashSync(req.body.password, parseInt(process.env.SALTROUND, 10));
+
+    const checkAdmin = await userModel.findOne({role : 'Admin'})
+
+    if(!checkAdmin){
+        console.log('yes')
+        req.body.role = 'Admin'
+    }
+
     
     const user = await userModel.create(req.body);
     if (!user) {
