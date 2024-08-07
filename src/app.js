@@ -12,7 +12,6 @@ export const initApp = (app,express)=>{
     app.use(express.json())
     app.use(cors())
     connectDB();
-   
     
 
 
@@ -27,6 +26,7 @@ export const initApp = (app,express)=>{
     app.use('/',(req,res)=>{
         res.json({message : 'welcome to HolidayHive project'})
     })
+
     
     app.use('*',(req,res)=>{
         res.status(404).json({message : "page not found"})
