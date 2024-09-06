@@ -11,7 +11,7 @@ const router = Router({caseSensitive : true});
 router.use('/:id/destination',asyncHandler(destinationRouter))
 
 router.post('/',asyncHandler(auth(endPoints.create)),fileUpload(filleType.image).single('image')
-,asyncHandler(countryControllar.addContry))
+,asyncHandler(countryControllar.addCountry))
 
 router.get('/',asyncHandler(auth(endPoints.get)),asyncHandler(countryControllar.getAll))
 router.get('/active',asyncHandler(countryControllar.getActive))
