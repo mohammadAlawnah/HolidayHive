@@ -15,11 +15,11 @@ router.post('/',asyncHandler(auth(endPoints.create)),fileUpload(filleType.image)
 
 router.get('/',asyncHandler(auth(endPoints.get)),asyncHandler(countryControllar.getAll))
 router.get('/active',asyncHandler(countryControllar.getActive))
-router.get('/:id',asyncHandler(countryControllar.getContry))
+router.get('/:id',asyncHandler(countryControllar.getCountry))
 
 router.put('/:id',asyncHandler(auth(endPoints.create)),asyncHandler(countryControllar.updateCountry))
 
-router.delete('/:id',asyncHandler(auth(endPoints.delete)),asyncHandler(countryControllar.deleteContry))
+router.delete('/:id',asyncHandler(auth(endPoints.delete)),asyncHandler(countryControllar.deleteCountry))
 
 
 export default router;
